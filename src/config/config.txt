@@ -1,0 +1,105 @@
+const Joi = require("joi");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+const envVarsSchema = Joi.object({
+  PORT: Joi.number().default(3000),
+  MONGODB_URL: Joi.string().trim().description("Mongodb url"),
+  JWT_SECRET_KEY: Joi.string()
+    .description("Jwt sectreat key")
+    .default("thisisjwtsecreat_key"),
+}).unknown();
+
+const { value: envVars, error } = envVarsSchema
+  .prefs({ errors: { label: "key" } })
+  .validate(process.env);
+
+module.exports = {
+    port: envVars.PORT,
+    mongodb: {
+        url: envVars.MONGODB_URL,
+        options: {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }
+    },
+    jwt: {
+    secret_key: envVars.JWT_SECRET_KEY,
+  }
+};
+
+=======================================================================
+
+// Importing the Joi library, which is used for validation
+const Joi = require("joi");
+
+// Importing the dotenv library, which is used to load environment variables from a .env file into process.env
+const dotenv = require("dotenv");
+
+// Loading environment variables from your .env file into process.env
+dotenv.config();
+
+// Defining a schema for the environment variables using Joi. This schema is used to validate and/or provide default values for the environment variables.
+
+const envVarsSchema = Joi.object({
+
+  // The PORT environment variable should be a number. If it's not provided, it defaults to 3000.
+  PORT: Joi.number().default(3000),
+
+  // The MONGODB_URL environment variable should be a string. It represents the URL for connecting to your MongoDB database.
+  MONGODB_URL: Joi.string().trim().description("Mongodb url"),
+
+  // The JWT_SECRET_KEY environment variable should be a string. It represents the secret key used for signing JSON Web Tokens (JWTs). If it's not provided, it defaults to "thisisjwtsecreat_key".
+  JWT_SECRET_KEY: Joi.string()
+    .description("Jwt sectreat key")
+    .default("thisisjwtsecreat_key"),
+}).unknown(); // Any unknown keys that are added to the .env file will still be included in process.env when using unknown()
+
+// Validating the loaded environment variables against the schema. If there are any validation errors, they will be stored in 'error'.
+const { value: envVars, error } = envVarsSchema
+  .prefs({ errors: { label: "key" } })
+  .validate(process.env);
+
+// Exporting the validated and/or default values of the environment variables for use in other parts of your application.
+module.exports = {
+    // The port number for your application to listen on.
+    port: envVars.PORT,
+
+    // The MongoDB connection details.
+    mongodb: {
+        // The URL for connecting to your MongoDB database.
+        url: envVars.MONGODB_URL,
+
+        // Options for the MongoDB connection.
+        options: {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }
+    },
+
+    // The secret key used for signing JSON Web Tokens (JWTs).
+    jwt: {
+        secret_key: envVars.JWT_SECRET_KEY,
+    },
+};
+
+
+////////
+This code is typically used in a Node.js application to load and validate environment variables from a .env file. These environment variables are often used for configuration settings that may vary between deployment environments (e.g., local development, staging, production). After validation, these values are exported for use in other parts of your application.
+////////
+
+
+////////
+const { value: envVars, error } = envVarsSchema
+  .prefs({ errors: { label: "key" } })
+  .validate(process.env);
+Copy
+envVarsSchema.validate(process.env): This line is using the validate method from the Joi library to validate the environment variables (process.env) against the defined schema (envVarsSchema). The validate method returns an object that contains two properties: value and error.
+
+.prefs({ errors: { label: "key" } }): This line is setting preferences for the validation. In this case, it’s specifying that if there are any validation errors, the error messages should use the key of the invalid environment variable (instead of the label, which is the default).
+
+const { value: envVars, error } = ...: This line is using destructuring assignment to extract the value and error properties from the object returned by the validate method. The value property (which is being renamed to envVars) contains the validated environment variables (with any transformations specified in the schema applied), and the error property contains any validation errors.
+
+So, in summary, this line of code is validating the environment variables against a schema, and then storing the validated variables and any validation errors in the envVars and error constants, respectively.
+////////

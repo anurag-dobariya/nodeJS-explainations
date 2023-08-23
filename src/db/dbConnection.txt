@@ -1,0 +1,49 @@
+const mongoose = require("mongoose");
+const config = require("../config/config");
+
+const connectDB = async () => {
+  mongoose
+    .connect(config.mongodb.url, config.mongodb.options)
+    .then((data) => {
+      console.log("Database connection successfully!");
+    })
+    .catch((error) => {
+      console.log("Database connetion error: ", error);
+    });
+};
+
+module.exports = { connectDB };
+
+
+======================================================================
+
+// Importing the mongoose library, which provides a straight-forward, schema-based solution to model your application data with MongoDB
+const mongoose = require("mongoose");
+
+// Importing the configuration file which contains the MongoDB connection details
+const config = require("../config/config");
+
+// Defining an asynchronous function to connect to the MongoDB database
+const connectDB = async () => {
+  // Attempting to connect to the MongoDB database using the mongoose library
+  mongoose
+    .connect(config.mongodb.url, config.mongodb.options)
+    // If the connection is successful, this callback function will be executed
+    .then((data) => {
+      // Logging a success message to the console
+      console.log("Database connection successfully!");
+    })
+    // If there is an error while connecting, this callback function will be executed
+    .catch((error) => {
+      // Logging the error message to the console
+      console.log("Database connetion error: ", error);
+    });
+};
+
+// Exporting the connectDB function for use in other parts of your application
+module.exports = { connectDB };
+
+
+/////////
+This code is typically used in a Node.js application to establish a connection to a MongoDB database. The connectDB function attempts to connect to the database using the connection details specified in your configuration file. If the connection is successful, a success message is logged to the console. If there is an error while connecting, the error message is logged to the console. The connectDB function is then exported for use in other parts of your application.
+////////
